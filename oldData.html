@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>thadeuk — programmer & linux tinkerer</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0e1113;
+      --card: #171b23;
+      --text: #e7ecf5;
+      --muted: #939daf;
+      --accent: #5ad1b5;
+      font-size: 16px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: radial-gradient(circle at top right, rgba(90, 209, 181, 0.18), transparent 55%), var(--bg);
+      color: var(--text);
+      padding: 3rem 1.5rem 4rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    main {
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      flex-direction: column;
+      gap: 2.75rem;
+    }
+
+    header span {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      font-size: 0.75rem;
+    }
+
+    h1 {
+      margin: 0.75rem 0 1rem;
+      font-size: clamp(2.4rem, 5vw, 3.3rem);
+      letter-spacing: -0.03em;
+    }
+
+    p {
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    section {
+      background: var(--card);
+      border-radius: 1.5rem;
+      padding: 1.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      box-shadow: 0 30px 80px -60px rgba(90, 209, 181, 0.8);
+    }
+
+    section h2 {
+      margin: 0 0 1rem;
+      font-size: 1.35rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 1rem;
+    }
+
+    li strong {
+      display: block;
+      margin-bottom: 0.35rem;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 2.5rem 1.25rem 3rem;
+      }
+
+      section {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <span>programmer / terminal nerd</span>
+      <h1>Thadeu keeps the keyboard in the driver's seat.</h1>
+      <p>
+        I live in Linux, drive everything from Neovim, and automate the rough edges out of my workflow.
+        Most days I'm writing Go or TypeScript, experimenting with Rust, and sharing notes about systems,
+        observability, and the trips I squeeze in between climbing sessions.
+      </p>
+      <p class="muted" style="margin-top: 1rem;">
+        Find me on <a href="https://github.com/thadeuk" target="_blank" rel="noopener">GitHub</a>.
+      </p>
+    </header>
+
+    <section>
+      <h2>Currently into</h2>
+      <ul>
+        <li>Neovim + Lua tuning for faster TypeScript and Go workflows.</li>
+        <li>Arch Linux dotfiles that spin up tmux, Hyprland, and observability tools in seconds.</li>
+        <li>Writing small automation scripts so the boring stuff happens without thinking.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Projects</h2>
+      <ul>
+        <li>
+          <strong>Terminal-first workflow</strong>
+          <span class="muted">Dotfiles, shell helpers, and tmux glue that keep focus inside the terminal.</span>
+          <br>
+          <a href="https://github.com/thadeuk/dotfiles" target="_blank" rel="noopener">Browse the repo →</a>
+        </li>
+        <li>
+          <strong>Media pipeline observability</strong>
+          <span class="muted">CLI tools to debug audio/video call quality with metrics and quick traces.</span>
+          <br>
+          <a href="https://github.com/thadeuk/media-insights" target="_blank" rel="noopener">Peek at the tooling →</a>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Notebook</h2>
+      <p class="muted">
+        Recent scribbles about debugging media pipelines, planning the next travel log, and tracking climbing sessions.
+        Notes land in plain markdown so they are easy to share or turn into posts later.
+      </p>
+    </section>
+
+    <footer>
+      Crafted with plain HTML & CSS. Best viewed in a terminal-friendly browser theme.
+    </footer>
+  </main>
+</body>
+</html>

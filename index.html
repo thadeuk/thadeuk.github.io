@@ -1,1 +1,96 @@
-Hello World
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thadeu Tucci</title>
+  <style>
+    :root { --bg:#f8f8f8; --fg:#111; --muted:#666; }
+    @media (prefers-color-scheme: dark){ :root{ --bg:#000; --fg:#ddd; --muted:#888; } }
+    body { margin:0; padding:24px; background:var(--bg); color:var(--fg); font:14px/1.6 monospace; max-width:70ch; }
+    h1 { font-size:16px; margin-bottom:4px; }
+    h2 { font-size:13px; margin:16px 0 6px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+    a { color:inherit; text-decoration:underline; }
+    a:hover { text-decoration:none; }
+    ul { padding-left:20px; }
+    .muted { color:var(--muted); }
+    footer { margin-top:24px; font-size:12px; color:var(--muted); }
+    img { max-width:100%; border-radius:4px; margin-top:8px; }
+  </style>
+</head>
+<body>
+  <h1>Thadeu Tucci</h1>
+  <p class="muted">Engineer · systems thinker · minimalist · climber</p>
+  <hr />
+
+  <section id="about">
+    <h2>About</h2>
+    <p>I’m a software engineer passionate about distributed systems, automation, and building reliable tools that stay simple and transparent. I enjoy designing quiet, predictable systems that just work and feel pleasant to maintain.</p>
+    <p>My current work involves building AI-powered systems that help computers interpret and act on human interactions. I like problems that require both deep focus and creativity, balancing reliability with product intuition.</p>
+    <p>Outside of work, I’m drawn to mountains, minimalism, and reflective reading. I’ve lived between Brazil, France, and Southeast Asia, often preferring quiet mountain towns where life moves slowly. Living between these regions keeps me connected to different rhythms of life: the calm precision of French work culture, the warmth and creativity of Brazil, and the balance and simplicity of Southeast Asia.</p>
+    <img src="images/railay.jpg" alt="Climbing at Railay Beach, Thailand" />
+  </section>
+
+  <section id="education">
+    <h2>Education</h2>
+    <p>I hold a <strong>Ph.D. in Computer Science from France</strong>, where my research focused on <strong>distributed systems and modular robots</strong>. The work explored how independent robotic modules can cooperate, self-organize, and adapt through decentralized coordination, combining engineering precision with emergent behavior.</p>
+  </section>
+
+  <section id="projects">
+    <h2>Projects Contribution</h2>
+    <ul>
+      <li><strong><a href="https://www.programmable-matter.com/technology/visiblesim">VisibleSim</a></strong> — A C++/OpenGL simulator for modular robotics developed during my Ph.D., used to study distributed coordination and morphology in self-organizing robots.</li>
+      <li><strong><a href="https://github.com/thadeuk/geosolver">GeoGuessr Solver</a></strong> — A tool for exploring and analyzing GeoGuessr locations, automating region detection and map pattern recognition. Tool developed during a holiday rest day in Tenerife.</li>
+      <li><strong><a href="https://github.com/thadeuk/dotfiles">Dotfiles</a></strong> — My Arch Linux + i3/Hyprland + NeoVim environment with tuned scripts for focus, stability, and minimalism.</li>
+    </ul>
+  </section>
+
+  <section id="climbing">
+    <h2>Rock Climbing</h2>
+    <p>Climbing gives me the same satisfaction as a well-structured system, with its precision, balance, and flow. I’ve climbed in <strong>Fontainebleau</strong> (France), <strong>Igatu</strong> and <strong>Serra do Cipó</strong> (Brazil), and on the sea cliffs of <strong>Tonsai</strong> and <strong>Railay</strong> in Thailand.</p>
+<!--     <ul>
+      <li><em>Humanality (6b, Tonsai)</em> – exposed arete with a sea view.</li>
+      <li><em>Said & Done (7a, Railay)</em> – balanced limestone line with delicate footwork.</li>
+      <li><em>Cantinho da Paz (6c, Serra do Cipó)</em> – Brazil’s delicate vertical beauty.</li>
+      <li><em>Marie Rose (6a, Fontainebleau)</em> – a classic boulder that teaches humility.</li>
+    </ul> -->
+  </section>
+
+  <section id="reading">
+    <h2>Books</h2>
+    <ul>
+      <li><em>In Search of the Miraculous</em> – P.D. Ouspensky</li>
+      <li><em>Meditations</em> – Marcus Aurelius</li>
+      <li><em>Art</em> – Yasmina Reza</li>
+      <!-- <li><em>Zen Mind, Beginner’s Mind</em> – Shunryu Suzuki</li> -->
+      <!-- <li><em>The Way of a Pilgrim</em> – Anonymous Russian classic</li> -->
+      <!-- <li><em>Gödel, Escher, Bach</em> – Douglas Hofstadter</li> -->
+      <!-- <li><em>Thinking, Fast and Slow</em> – Daniel Kahneman</li> -->
+    </ul>
+  </section>
+
+  <section id="interests">
+    <h2>Other Interests</h2>
+    <ul>
+      <li>Vegetarian cooking, homemade pasta, cheese, and sourdough bread</li>
+      <li>Exploring offline maps and remote mountain trails</li>
+      <li>Writing about simplicity, systems, and consciousness</li>
+      <li>Slow travel through small towns in Asia, Europe, and Latin America</li>
+      <li>Learning languages and studying cultural nuances</li>
+    </ul>
+  </section>
+
+  <section id="links">
+    <h2>Links</h2>
+    <ul>
+      <li><a href="mailto:thadeutucci@gmail.com">thadeutucci@gmail.com</a></li>
+      <li><a href="https://github.com/thadeuk">github.com/thadeuk</a></li>
+      <li><a href="https://www.linkedin.com/in/thadeutucci/">linkedin.com/in/thadeutucci</a></li>
+    </ul>
+  </section>
+
+  <footer>
+    © <script>document.write(new Date().getFullYear())</script> Thadeu Tucci
+  </footer>
+</body>
+</html>
