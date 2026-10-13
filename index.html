@@ -4,110 +4,434 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Thadeu Tucci</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'><path fill='%238cbf73' d='M6 3h4v1h-4zM4 4h2v1h-2zM10 4h2v1h-2zM2 5h2v1h-2zM12 5h2v1h-2zM2 6h1v1h-1zM4 6h2v1h-2zM10 6h2v1h-2zM13 6h1v1h-1zM2 7h1v1h-1zM6 7h4v1h-4zM13 7h1v1h-1zM2 8h1v4h-1zM7 8h2v6h-2zM13 8h1v4h-1zM2 12h2v1h-2zM12 12h2v1h-2zM4 13h2v1h-2zM10 13h2v1h-2zM6 14h4v1h-4zM4 9h2v2h-2zM10 9h2v2h-2z'/></svg>" />
+  <script>
+    // The saved theme applies before the first paint. With none, the page follows the system.
+    try {
+      const theme = localStorage.getItem('theme');
+      if (theme) {
+        document.documentElement.dataset.theme = theme;
+      }
+    } catch {}
+  </script>
+  <link rel="preload" href="fonts/GeistPixel-Square.woff2" as="font" type="font/woff2" crossorigin />
   <style>
-    :root { --bg:#f8f8f8; --fg:#111; --muted:#666; }
-    @media (prefers-color-scheme: dark){ :root{ --bg:#000; --fg:#ddd; --muted:#888; } }
-    body { margin:0; padding:24px; background:var(--bg); color:var(--fg); font:14px/1.6 monospace; max-width:70ch; }
-    h1 { font-size:16px; margin-bottom:4px; }
-    h2 { font-size:13px; margin:16px 0 6px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
-    a { color:inherit; text-decoration:underline; }
-    a:hover { text-decoration:none; }
-    ul { padding-left:20px; }
-    .muted { color:var(--muted); }
-    footer { margin-top:24px; font-size:12px; color:var(--muted); }
-    img { max-width:100%; border-radius:4px; margin-top:8px; }
+    @font-face {
+      font-family: "Geist Pixel";
+      src: url("fonts/GeistPixel-Square.woff2") format("woff2");
+      font-weight: 500;
+      font-display: swap;
+    }
+
+    /* Warm paper by day, near black by night. data-theme on <html> overrides the system. */
+    :root {
+      color-scheme: light dark;
+      --bg: light-dark(#d8d5c5, #111111);
+      --fg: light-dark(#111111, #d8d5c5);
+      --muted: light-dark(#5e5650, #a6a296);
+      --rule: light-dark(#a6a296, #3d4242);
+      --shadow: light-dark(#b4ab8f, #2c3538);
+      --accent: light-dark(#3a5f3b, #8cbf73);
+      --accent-dim: light-dark(#8fae86, #3d5a3a);
+    }
+    :root[data-theme="light"] { color-scheme: light; }
+    :root[data-theme="dark"] { color-scheme: dark; }
+
+    * { box-sizing: border-box; }
+    ::selection { color: var(--bg); background: var(--fg); }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font: 500 1rem/1.7 "Geist Pixel", ui-monospace, Menlo, monospace;
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
+    }
+    main { max-width: 44rem; margin: 0 auto; padding: 2rem 1rem 5rem; }
+    @media (min-width: 40rem) { main { padding-inline: 1.5rem; } }
+
+    h1, h2, h3, h4 { font-weight: 500; line-height: 1.3; }
+    h1 { font-size: 1.75rem; margin: 0; }
+    h3 { font-size: 0.8rem; color: var(--muted); margin: 2rem 0 0.75rem; }
+    h3:first-child { margin-top: 0; }
+    h4 { font-size: 0.8rem; color: var(--muted); margin: 1.25rem 0 0.5rem; }
+    em { font-style: normal; }
+    /* The font has one weight: a copy 1 px to the right makes a sharp pixel bold. */
+    strong { font-weight: inherit; text-shadow: 1px 0 0 currentColor; }
+    .small { font-size: 0.8rem; color: var(--muted); }
+    a { color: inherit; text-decoration: underline; text-decoration-color: var(--muted); text-underline-offset: 3px; }
+    a:hover { text-decoration-color: var(--fg); }
+    footer { margin-top: 3rem; font-size: 0.8rem; color: var(--muted); }
+
+    header { display: flex; align-items: center; gap: 1rem; }
+    header + .small { margin-top: 0.25rem; }
+
+    /* Pixel frame: 2 px border and a hard shadow. A press moves it into its shadow. */
+    .theme, .chips a {
+      color: var(--fg); background: var(--bg); cursor: pointer;
+      border: 2px solid var(--muted); box-shadow: 4px 4px 0 var(--shadow);
+    }
+    :is(.theme, .chips a):hover { border-color: var(--fg); transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--shadow); }
+    :is(.theme, .chips a):active { transform: translate(4px, 4px); box-shadow: none; }
+    :is(.theme, .chips a):focus-visible { outline: 1px solid var(--fg); outline-offset: 4px; }
+
+    /* Theme button: the moon on a light page, the sun on a dark page. */
+    .theme { margin-left: auto; padding: 4px; line-height: 0; }
+    .theme svg { fill: currentColor; shape-rendering: crispEdges; }
+    :root[data-theme="light"] .sun, :root[data-theme="dark"] .moon { display: none; }
+    @media (prefers-color-scheme: light) { :root:not([data-theme]) .sun { display: none; } }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme]) .moon { display: none; } }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; margin: 1.5rem 0 0; padding: 0; list-style: none; }
+    .chips a { display: inline-block; padding: 0.1rem 0.6rem; font-size: 0.875rem; text-decoration: none; }
+
+    /* Tabs: radio buttons, so no script is needed. The checked tab shows its pixel icon. */
+    .tabs { margin-top: 3rem; display: grid; grid-template-columns: repeat(4, 1fr); }
+    .tabs input { position: absolute; opacity: 0; pointer-events: none; }
+    .tabs label {
+      position: relative; padding: 0.5rem 0; text-align: center; white-space: nowrap;
+      color: var(--muted); border-bottom: 2px solid var(--rule); cursor: pointer;
+    }
+    .tabs label:hover { color: var(--fg); }
+    .tabs input:checked + label { color: var(--fg); border-color: var(--fg); }
+    .tabs input:focus-visible + label { outline: 1px solid var(--fg); outline-offset: 2px; }
+    .panel { display: none; grid-column: 1 / -1; margin-top: 1.5rem; }
+    #tab-articles:checked ~ #articles, #tab-projects:checked ~ #projects,
+    #tab-gallery:checked ~ #gallery, #tab-offline:checked ~ #offline { display: block; }
+
+    /* The negative right margin cancels the icon width, so the word stays centered. */
+    .tabs label svg {
+      display: none; width: 24px; height: 24px; margin: -8px -24px 0 0.3em; vertical-align: -6px;
+      fill: currentColor; shape-rendering: crispEdges;
+    }
+    .tabs input:checked + label svg { display: inline; }
+    #tab-articles:checked + label::after {
+      content: ""; position: absolute; width: 0.6em; height: 1.2em; margin: 0.25em 0 0 0.15em;
+      background: var(--accent); animation: blink 1.06s steps(1, end) infinite;
+    }
+    @media (max-width: 30rem) {
+      .tabs label { font-size: 0.875rem; }
+      .tabs label svg { width: 16px; height: 16px; margin: -4px -16px 0 0.2em; vertical-align: -3px; }
+    }
+
+    /* Icons. The cube is a Blinky Block, the modular robot of my Ph.D.: its LEDs blink. */
+    .cube .face { fill: var(--muted); }
+    .cube .led, .photo .sun-dot, .tent .star { fill: var(--accent); }
+    .cube .led { animation: blink 1.2s steps(1, end) infinite; }
+    .cube .led + .led { animation-delay: -0.6s; }
+    .photo .sun-dot { animation: rise 3s steps(1, end) infinite; }
+    .tent .star { animation: blink 1.6s steps(1, end) infinite; }
+    .tent .star:nth-of-type(2) { animation-delay: -0.4s; }
+    .tent .star:nth-of-type(3) { animation-delay: -1s; }
+    @keyframes blink { 50% { opacity: 0; } }
+    @keyframes rise { 0% { transform: translateY(3px); } 20% { transform: translateY(2px); } 40% { transform: translateY(1px); } 60% { transform: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      .tabs label::after, .tabs svg * { animation: none !important; }
+    }
+
+    /* Writing and project lists. */
+    .list { list-style: none; padding: 0; margin: 0; }
+    .list li { margin: 0 0 1.25rem; }
+    .list li > a:first-child { color: var(--accent); text-decoration-color: var(--accent-dim); }
+    .list li > a:first-child:hover { text-decoration-color: var(--accent); }
+    .list .meta { display: block; font-size: 0.85rem; color: var(--muted); }
+    .list p { margin: 0.15rem 0 0; font-size: 0.9rem; color: var(--muted); }
+
+    .bullets { margin: 0; padding-left: 1.25rem; list-style: square; }
+    .bullets li { margin: 0.25rem 0; }
+    .bullets li::marker { color: var(--accent); }
+
+    /* Gallery: one photo at a time. The script swaps photos through big pixels (see .pixels). */
+    .deck { display: grid; justify-items: center; user-select: none; -webkit-user-select: none; cursor: pointer; }
+    .deck:focus-visible { outline: 1px solid var(--fg); outline-offset: 8px; }
+    .card { display: none; position: relative; grid-area: 1 / 1; margin: 0; }
+    .card.on { display: block; }
+    .card img {
+      display: block; width: auto; height: auto; max-width: 100%; max-height: 70vh;
+      box-shadow: 0 0 0 2px var(--muted), 6px 6px 0 2px var(--shadow);
+      pointer-events: none; -webkit-user-drag: none;
+    }
+    .card .pixels { position: absolute; image-rendering: pixelated; pointer-events: none; }
+
+    /* Wide screen: text on the left, the gallery fixed on the right half, so it has no tab. */
+    @media (min-width: 64rem) {
+      main { width: min(40rem, 50vw); max-width: none; margin-left: max(0px, (50vw - 40rem) / 2); }
+      .tabs { grid-template-columns: repeat(3, 1fr); }
+      #tab-gallery, label[for="tab-gallery"] { display: none; }
+      #gallery, #tab-gallery:checked ~ #gallery {
+        display: flex; flex-direction: column; justify-content: center; position: fixed; inset: 0 0 0 50vw;
+        margin: 0; border-left: 2px solid var(--rule);
+      }
+      .card img { max-width: calc(50vw - 6rem); max-height: calc(100vh - 8rem); }
+    }
   </style>
 </head>
 <body>
-  <h1>Thadeu Tucci</h1>
-  <p class="muted">Engineer · systems thinker · minimalist · climber</p>
-  <hr />
+  <main>
+    <header>
+      <h1>Thadeu Tucci</h1>
+      <button class="theme" type="button" aria-label="Switch between light and dark mode">
+        <svg viewBox="0 0 12 12" width="24" height="24" aria-hidden="true">
+          <path class="sun" d="M5 0h2v1h-2zM1 1h1v1h-1zM5 1h2v1h-2zM10 1h1v1h-1zM4 3h4v1h-4zM3 4h6v1h-6zM0 5h2v1h-2zM3 5h6v1h-6zM10 5h2v1h-2zM0 6h2v1h-2zM3 6h6v1h-6zM10 6h2v1h-2zM3 7h6v1h-6zM4 8h4v1h-4zM1 10h1v1h-1zM5 10h2v1h-2zM10 10h1v1h-1zM5 11h2v1h-2z"/>
+          <path class="moon" d="M3 1h2v1h-2zM2 2h2v1h-2zM1 3h3v1h-3zM1 4h3v1h-3zM0 5h4v1h-4zM0 6h5v1h-5zM1 7h5v1h-5zM1 8h10v1h-10zM2 9h8v1h-8zM3 10h6v1h-6zM5 11h2v1h-2z"/>
+        </svg>
+      </button>
+    </header>
+    <p class="small">Engineer · minimalist · climber</p>
 
-  <section id="about">
-    <h2>About</h2>
     <p>I’m a software engineer passionate about distributed systems, automation, and building reliable tools that stay simple and transparent. Currently I’m a tech lead at <strong>Fireflies.ai</strong>, guiding the recording agent and AI-focused pipelines. I enjoy designing quiet, predictable systems that just work and feel pleasant to maintain.</p>
     <p>My current work involves building AI-powered systems that help computers interpret and act on human interactions. I like problems that require both deep focus and creativity, balancing reliability with product intuition.</p>
     <p>Outside of work, I’m drawn to mountains, minimalism, and reflective reading. I’ve lived between Brazil, France, and Southeast Asia, often preferring quiet mountain towns where life moves slowly. Living between these regions keeps me connected to different rhythms of life: the calm precision of French work culture, the warmth and creativity of Brazil, and the balance and simplicity of Southeast Asia.</p>
-    <img src="images/railay.jpg" alt="Climbing at Railay Beach, Thailand" />
-  </section>
+    <p>I hold a <strong>Ph.D. in Computer Science</strong> from <strong>Université Bourgogne Franche-Comté</strong> (France), where my research focused on <strong>distributed systems and modular robots</strong>. The work explored how independent robotic modules can cooperate, self-organize, and adapt through decentralized coordination, combining engineering precision with emergent behavior.</p>
 
-  <section id="education">
-    <h2>Education</h2>
-    <p>I hold a <strong>Ph.D. in Computer Science from France</strong>, where my research focused on <strong>distributed systems and modular robots</strong>. The work explored how independent robotic modules can cooperate, self-organize, and adapt through decentralized coordination, combining engineering precision with emergent behavior.</p>
-  </section>
-
-  <section id="articles">
-    <h2>Articles</h2>
-    <p class="muted">Research publications</p>
-    <ul>
-      <li><a href="https://dl.acm.org/doi/10.5555/3237383.3237465">A Distributed Self-Assembly Planning Algorithm for Modular Robots</a> <span class="muted">— AAMAS 2018</span></li>
-      <li><a href="https://link.springer.com/chapter/10.1007/978-3-319-73008-0_29">Network Characterization of Lattice-Based Modular Robots</a> <span class="muted">— Springer 2018</span></li>
-      <li><a href="https://www.researchgate.net/publication/316146252_Efficient_Scene_Encoding_for_Programmable_Matter_Self-Reconfiguration_Algorithms">Efficient Scene Encoding for Programmable Matter Self-Reconfiguration</a> <span class="muted">— ACM SAC 2017</span></li>
-      <li><a href="https://www.researchgate.net/publication/309631628_Programmable_matter_as_a_cyber-physical_conjugation">Programmable Matter as a Cyber-Physical Conjugation</a> <span class="muted">— IEEE SMC 2016</span></li>
-    </ul>
-    <p class="muted" style="margin-top:12px;">Writing</p>
-    <ul>
-      <li><a href="https://thadeutucci.medium.com/journey-to-a-tiling-window-manager-i3wm-439e0de585c9">Journey to a Tiling Window Manager: i3wm</a> <span class="muted">— Medium</span></li>
-    </ul>
-  </section>
-
-  <section id="projects">
-    <h2>Projects Contribution</h2>
-    <ul>
-      <li><strong><a href="https://www.programmable-matter.com/technology/visiblesim">VisibleSim</a></strong> — A C++/OpenGL simulator for modular robotics developed during my Ph.D., used to study distributed coordination and morphology in self-organizing robots.</li>
-      <li><strong><a href="https://github.com/thadeuk/geosolver">GeoGuessr Solver</a></strong> — A tool for exploring and analyzing GeoGuessr locations, automating region detection and map pattern recognition. Tool developed during a holiday rest day in Tenerife.</li>
-      <li><strong><a href="https://github.com/thadeuk/dotfiles">Dotfiles</a></strong> — My Arch Linux + i3/Hyprland + NeoVim environment with tuned scripts for focus, stability, and minimalism.</li>
-    </ul>
-  </section>
-
-  <section id="climbing">
-    <h2>Rock Climbing</h2>
-    <p>Climbing gives me the same satisfaction as a well-structured system, with its precision, balance, and flow. I’ve climbed in <strong>Fontainebleau</strong> (France), <strong>Igatu</strong> and <strong>Serra do Cipó</strong> (Brazil), and on the sea cliffs of <strong>Tonsai</strong> and <strong>Railay</strong> in Thailand.</p>
-<!--     <ul>
-      <li><em>Humanality (6b, Tonsai)</em> – exposed arete with a sea view.</li>
-      <li><em>Said & Done (7a, Railay)</em> – balanced limestone line with delicate footwork.</li>
-      <li><em>Cantinho da Paz (6c, Serra do Cipó)</em> – Brazil’s delicate vertical beauty.</li>
-      <li><em>Marie Rose (6a, Fontainebleau)</em> – a classic boulder that teaches humility.</li>
-    </ul> -->
-  </section>
-
-  <section id="reading">
-    <h2>Books</h2>
-    <ul>
-      <li><em>In Search of the Miraculous</em> – P.D. Ouspensky</li>
-      <li><em>Meditations</em> – Marcus Aurelius</li>
-      <li><em>Art</em> – Yasmina Reza</li>
-      <!-- <li><em>Zen Mind, Beginner’s Mind</em> – Shunryu Suzuki</li> -->
-      <!-- <li><em>The Way of a Pilgrim</em> – Anonymous Russian classic</li> -->
-      <!-- <li><em>Gödel, Escher, Bach</em> – Douglas Hofstadter</li> -->
-      <!-- <li><em>Thinking, Fast and Slow</em> – Daniel Kahneman</li> -->
-    </ul>
-  </section>
-
-  <section id="interests">
-    <h2>Other Interests</h2>
-    <ul>
-      <li>Vegetarian cooking, homemade pasta, cheese, and sourdough bread</li>
-      <li>Exploring offline maps and remote mountain trails</li>
-      <li>Writing about simplicity, systems, and consciousness</li>
-      <li>Slow travel through small towns in Asia, Europe, and Latin America</li>
-      <li>Learning languages and studying cultural nuances</li>
-    </ul>
-  </section>
-
-  <section id="links">
-    <h2>Links</h2>
-    <ul>
+    <ul class="chips">
       <li><a href="mailto:thadeutucci@gmail.com">thadeutucci@gmail.com</a></li>
       <li><a href="https://github.com/thadeuk">github.com/thadeuk</a></li>
       <li><a href="https://www.linkedin.com/in/thadeutucci/">linkedin.com/in/thadeutucci</a></li>
       <li><a href="https://www.researchgate.net/profile/Thadeu-Tucci">researchgate.net/profile/Thadeu-Tucci</a></li>
       <li><a href="https://thadeutucci.medium.com">thadeutucci.medium.com</a></li>
     </ul>
-  </section>
 
-  <footer>
-    © <script>document.write(new Date().getFullYear())</script> Thadeu Tucci
-  </footer>
+    <div class="tabs">
+      <input type="radio" name="tab" id="tab-articles" checked><label for="tab-articles">Articles</label>
+      <input type="radio" name="tab" id="tab-projects"><label for="tab-projects">Projects<svg class="cube" viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M6 3h4v1h-4zM4 4h2v1h-2zM10 4h2v1h-2zM2 5h2v1h-2zM12 5h2v1h-2zM2 6h1v1h-1zM4 6h2v1h-2zM10 6h2v1h-2zM13 6h1v1h-1zM2 7h1v1h-1zM6 7h4v1h-4zM13 7h1v1h-1zM2 8h1v1h-1zM7 8h2v1h-2zM13 8h1v1h-1zM2 9h1v1h-1zM7 9h2v1h-2zM13 9h1v1h-1zM2 10h1v1h-1zM7 10h2v1h-2zM13 10h1v1h-1zM2 11h1v1h-1zM7 11h2v1h-2zM13 11h1v1h-1zM2 12h2v1h-2zM7 12h2v1h-2zM12 12h2v1h-2zM4 13h2v1h-2zM7 13h2v1h-2zM10 13h2v1h-2zM6 14h4v1h-4z"/>
+        <path class="face" d="M6 4h4v1h-4zM4 5h8v1h-8zM6 6h4v1h-4z"/>
+        <path class="led" d="M4 9h2v1h-2zM4 10h2v1h-2z"/>
+        <path class="led" d="M10 9h2v1h-2zM10 10h2v1h-2z"/>
+      </svg></label>
+      <input type="radio" name="tab" id="tab-gallery"><label for="tab-gallery">Gallery<svg class="photo" viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M1 4h14v1h-14zM1 5h1v1h-1zM14 5h1v1h-1zM1 6h1v1h-1zM14 6h1v1h-1zM1 7h1v1h-1zM14 7h1v1h-1zM1 8h1v1h-1zM6 8h1v1h-1zM14 8h1v1h-1zM1 9h1v1h-1zM5 9h3v1h-3zM14 9h1v1h-1zM1 10h1v1h-1zM4 10h5v1h-5zM10 10h1v1h-1zM14 10h1v1h-1zM1 11h1v1h-1zM3 11h9v1h-9zM14 11h1v1h-1zM1 12h14v1h-14zM1 13h14v1h-14z"/>
+        <path class="sun-dot" d="M11 6h2v1h-2zM11 7h2v1h-2z"/>
+      </svg></label>
+      <input type="radio" name="tab" id="tab-offline"><label for="tab-offline">Offline<svg class="tent" viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M7 6h2v1h-2zM6 7h4v1h-4zM5 8h6v1h-6zM4 9h3v1h-3zM9 9h3v1h-3zM3 10h3v1h-3zM10 10h3v1h-3zM2 11h3v1h-3zM11 11h3v1h-3zM1 12h3v1h-3zM12 12h3v1h-3zM0 13h16v1h-16z"/>
+        <path class="star" d="M2 3h1v1h-1zM1 4h3v1h-3zM2 5h1v1h-1z"/>
+        <path class="star" d="M12 3h1v1h-1z"/>
+        <path class="star" d="M10 5h1v1h-1z"/>
+      </svg></label>
+
+      <section class="panel" id="articles">
+        <h3>Research publications</h3>
+        <ul class="list">
+          <li><a href="https://dl.acm.org/doi/10.5555/3237383.3237465">A Distributed Self-Assembly Planning Algorithm for Modular Robots</a><span class="meta">AAMAS 2018</span></li>
+          <li><a href="https://link.springer.com/chapter/10.1007/978-3-319-73008-0_29">Network Characterization of Lattice-Based Modular Robots</a><span class="meta">DARS 2016</span></li>
+          <li><a href="https://doi.org/10.1145/3019612.3019706">Efficient Scene Encoding for Programmable Matter Self-Reconfiguration</a><span class="meta">ACM SAC 2017</span></li>
+          <li><a href="https://doi.org/10.1109/SMC.2016.7844687">Programmable Matter as a Cyber-Physical Conjugation</a><span class="meta">IEEE SMC 2016</span></li>
+        </ul>
+        <h3>Writing</h3>
+        <ul class="list">
+          <li><a href="https://thadeutucci.medium.com/journey-to-a-tiling-window-manager-i3wm-439e0de585c9">Journey to a Tiling Window Manager: i3wm</a><span class="meta">Medium</span></li>
+        </ul>
+      </section>
+
+      <section class="panel" id="projects">
+        <ul class="list">
+          <li><a href="https://www.programmable-matter.com/technology/visiblesim">VisibleSim</a><p>A C++/OpenGL simulator for modular robotics developed during my Ph.D., used to study distributed coordination and morphology in self-organizing robots.</p></li>
+          <li><a href="https://github.com/thadeuk/geosolver">GeoGuessr Solver</a><p>A tool for exploring and analyzing GeoGuessr locations, automating region detection and map pattern recognition. Built on a rest day in Tenerife.</p></li>
+          <li><a href="https://github.com/thadeuk/dotfiles">Dotfiles</a><p>My Arch Linux + i3/Hyprland + NeoVim environment with tuned scripts for focus, stability, and minimalism.</p></li>
+        </ul>
+      </section>
+
+      <section class="panel" id="gallery">
+        <div class="deck" tabindex="0" aria-label="Photos. Click, or press the right arrow key, for the next one.">
+          <figure class="card on">
+            <img src="images/railay.jpg" alt="Climbing at Railay Beach, Thailand" width="1019" height="1359" />
+          </figure>
+        </div>
+      </section>
+
+      <section class="panel" id="offline">
+        <h3>Rock Climbing</h3>
+        <p>Climbing gives me the same satisfaction as a well-structured system, with its precision, balance, and flow. I’ve climbed in <strong>Fontainebleau</strong> (France), <strong>Igatu</strong>, <strong>Serra do Cipó</strong>, and <strong>Bocaina</strong> (Brazil), and on the sea cliffs of <strong>Tonsai</strong> and <strong>Railay</strong> in Thailand.</p>
+        <ul class="bullets">
+          <li><em>Humanality (6b+, Tonsai)</em></li>
+          <li><em>Mundo Mágico dos Abacates (6c+, Bocaina)</em></li>
+          <li><em>Cravo e a Rosa (6c+, Serra do Cipó)</em></li>
+        </ul>
+        <h4>Boulder</h4>
+        <ul class="bullets">
+          <li><em>Marie Rose (6a, Fontainebleau)</em></li>
+          <li><em>Casinha de Boneca (V5/7a, Igatu)</em></li>
+          <li><em>Denorex (V5/7a, Igatu)</em></li>
+        </ul>
+        <p><a href="https://www.8a.nu/user/thadeu-tucci/">8a.nu/user/thadeu-tucci</a></p>
+
+        <h3>Books</h3>
+        <ul class="bullets">
+          <li><em>In Search of the Miraculous</em> – P.D. Ouspensky</li>
+          <li><em>Meditations</em> – Marcus Aurelius</li>
+          <li><em>Art</em> – Yasmina Reza</li>
+          <!-- <li><em>Zen Mind, Beginner’s Mind</em> – Shunryu Suzuki</li> -->
+          <!-- <li><em>The Way of a Pilgrim</em> – Anonymous Russian classic</li> -->
+          <!-- <li><em>Gödel, Escher, Bach</em> – Douglas Hofstadter</li> -->
+          <!-- <li><em>Thinking, Fast and Slow</em> – Daniel Kahneman</li> -->
+        </ul>
+
+        <h3>Other Interests</h3>
+        <ul class="bullets">
+          <li>Vegetarian cooking, homemade pasta, cheese, and sourdough bread</li>
+          <li>Exploring offline maps and remote mountain trails</li>
+          <li>Writing about simplicity, systems, and consciousness</li>
+          <li>Slow travel through small towns in Asia, Europe, and Latin America</li>
+          <li>Learning languages and studying cultural nuances</li>
+        </ul>
+      </section>
+    </div>
+
+    <footer>
+      © <script>document.write(new Date().getFullYear())</script> Thadeu Tucci
+    </footer>
+  </main>
+
+  <script>
+    // Theme button. Picking the system's scheme forgets the choice, so the page follows the system again.
+    document.querySelector('.theme').addEventListener('click', () => {
+      const root = document.documentElement;
+      const system = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      const next = (root.dataset.theme || system) === 'light' ? 'dark' : 'light';
+
+      if (next === system) {
+        delete root.dataset.theme;
+      } else {
+        root.dataset.theme = next;
+      }
+
+      try {
+        if (next === system) {
+          localStorage.removeItem('theme');
+        } else {
+          localStorage.setItem('theme', next);
+        }
+      } catch {}
+    });
+
+    // Gallery: a click (or →, Enter, Space) breaks the photo into big pixels, and the next one comes back sharp.
+    // ← goes back. On a wide screen the photo changes on its own.
+    //
+    //   sharp ──4──8──16──32px──▶ swap ──32──16──8──4──▶ sharp
+    const deck = document.querySelector('.deck');
+    const cards = [...deck.querySelectorAll('.card')];
+    const BLOCKS = [4, 8, 16, 32];
+    const STEP_MS = 40;
+    const AUTO_MS = 10000;
+    const still = matchMedia('(prefers-reduced-motion: reduce)');
+    const wide = matchMedia('(min-width: 64rem)');
+    const wait = (ms) => new Promise((done) => setTimeout(done, ms));
+    const inView = () => deck.getClientRects().length > 0;
+    let shown = 0;
+    let busy = false;
+    let wasInView = false;
+    let timer;
+
+    // A canvas over the photo of a card. draw(px) paints the photo in blocks of px CSS pixels.
+    function cover(card) {
+      const img = card.querySelector('img');
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.className = 'pixels';
+      Object.assign(canvas.style, {
+        left: `${img.offsetLeft}px`, top: `${img.offsetTop}px`,
+        width: `${img.offsetWidth}px`, height: `${img.offsetHeight}px`,
+      });
+      card.append(canvas);
+
+      const draw = (px) => {
+        canvas.width = Math.ceil(img.offsetWidth / px);
+        canvas.height = Math.ceil(img.offsetHeight / px);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      };
+      return { canvas, draw };
+    }
+
+    async function play(layer, sizes) {
+      for (const px of sizes) {
+        layer.draw(px);
+        await wait(STEP_MS);
+      }
+    }
+
+    // Brings the photo of a card from big pixels to sharp. The photo hides at once, so it never shows sharp first.
+    async function sharpen(card) {
+      const img = card.querySelector('img');
+      img.style.visibility = 'hidden';
+      try {
+        await img.decode();
+        const layer = cover(card);
+        await play(layer, [...BLOCKS].reverse());
+        layer.canvas.remove();
+      } catch {}
+      img.style.visibility = '';
+    }
+
+    async function show(next) {
+      if (busy) {
+        return;
+      }
+      busy = true;
+
+      const animate = inView() && !still.matches;
+      if (animate) {
+        const layer = cover(cards[shown]);
+        await play(layer, BLOCKS);
+        layer.canvas.remove();
+      }
+
+      cards[shown].classList.remove('on');
+      cards[next].classList.add('on');
+      shown = next;
+      cards[(next + 1) % cards.length].querySelector('img').loading = 'eager';
+
+      if (animate) {
+        await sharpen(cards[next]);
+      }
+      busy = false;
+    }
+
+    const step = (delta) => show((shown + delta + cards.length) % cards.length);
+
+    // The photo sharpens when the gallery comes into view: its tab opens, or the screen gets wide.
+    async function reveal() {
+      const now = inView();
+      const opened = now && !wasInView;
+      wasInView = now;
+      if (!opened || busy || still.matches) {
+        return;
+      }
+
+      busy = true;
+      await sharpen(cards[shown]);
+      busy = false;
+    }
+
+    // The wide layout has no gallery tab: a checked one falls back to articles.
+    function layout() {
+      if (wide.matches && document.getElementById('tab-gallery').checked) {
+        document.getElementById('tab-articles').checked = true;
+      }
+
+      clearInterval(timer);
+      if (wide.matches && cards.length > 1) {
+        timer = setInterval(() => document.hidden || deck.matches(':hover') || step(1), AUTO_MS);
+      }
+      reveal();
+    }
+
+    deck.addEventListener('click', () => step(1));
+    deck.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        step(-1);
+      } else if (['ArrowRight', 'Enter', ' '].includes(e.key)) {
+        step(1);
+      } else {
+        return;
+      }
+      e.preventDefault();
+    });
+    document.querySelector('.tabs').addEventListener('change', reveal);
+    wide.addEventListener('change', layout);
+    layout();
+  </script>
 </body>
 </html>
